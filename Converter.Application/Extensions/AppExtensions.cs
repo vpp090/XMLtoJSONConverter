@@ -1,6 +1,4 @@
-﻿using Converter.Application.Contracts;
-using Converter.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Converter.Application.Extensions
@@ -10,7 +8,7 @@ namespace Converter.Application.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
 
-            services.AddScoped<IXMLConverter, XMLConverterService>();
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies(typeof(AppExtensions).Assembly));
             
             return services;
         }

@@ -4,6 +4,6 @@ namespace Converter.Application.Contracts
 {
     public interface IXMLConverter
     {
-        Task<string> ConvertXMLtoJson(IFormFile xmlFile, string fileName);
+        Task<string> ConvertXMLtoJson(string xmlContent);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Converter.Application.Contracts;
+using Converter.Application.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -9,11 +11,11 @@ namespace Converter.API.Controllers
     [ApiController]
     public class ConverterController : ControllerBase
     {
-        private readonly IXMLConverter _converter;
+        private readonly IMediator _mediator;
 
-        public ConverterController(IXMLConverter converter)
+        public ConverterController(IMediator mediator)
         {
-            _converter = converter;          
+            _mediator = mediator;      
         }
 
         [HttpPost]
@@ -21,7 +23,7 @@ namespace Converter.API.Controllers
         
         public async Task<ActionResult<IFormFile>> ConvertXMLtoJSON([FromForm] IFormFile xmlFile, [FromForm]string fileName)
         {
-            var result = await _converter.ConvertXMLtoJson(xmlFile, fileName);
+            var result = await _mediator.Send(new XmlToJsonRequest { File = xmlFile, FileName = fileName });
 
             if (string.IsNullOrEmpty(result))
                 return BadRequest("File not processed successfully try again");

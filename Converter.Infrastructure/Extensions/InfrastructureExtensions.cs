@@ -9,6 +9,7 @@ namespace Converter.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IXMLConverter, XmlConverter>();
 
             return services;
         }
