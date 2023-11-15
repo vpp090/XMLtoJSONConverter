@@ -8,12 +8,20 @@ namespace Converter.Infrastructure.Services
     {
         public async Task<string> ConvertXMLtoJson(string xmlContent)
         {
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xmlContent);
-            var jsonString = await Task.Run(() => JsonConvert.SerializeXmlNode(xmlDoc));
+            try
+            {
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(xmlContent);
+                var jsonString = await Task.Run(() => JsonConvert.SerializeXmlNode(xmlDoc));
 
 
-            return jsonString;
+                return jsonString;
+            }
+            catch(XmlException)
+            {
+                throw;
+            }
+           
         }
     }
 }
