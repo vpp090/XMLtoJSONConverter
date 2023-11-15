@@ -20,15 +20,24 @@ namespace Converter.API.Controllers
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         
         public async Task<ActionResult<IFormFile>> ConvertXMLtoJSON([FromForm] IFormFile xmlFile, [FromForm]string fileName)
         {
-            var result = await _mediator.Send(new XmlToJsonRequest { File = xmlFile, FileName = fileName });
+            try
+            {
+                var result = await _mediator.Send(new XmlToJsonRequest { File = xmlFile, FileName = fileName });
 
-            if (string.IsNullOrEmpty(result))
-                return BadRequest("File not processed successfully try again");
+                if (string.IsNullOrEmpty(result))
+                    return BadRequest("File_Not_Processed");
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }
