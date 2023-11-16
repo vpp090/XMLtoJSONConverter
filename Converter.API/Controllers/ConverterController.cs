@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Xml;
 
 namespace Converter.API.Controllers
 {
@@ -29,13 +30,21 @@ namespace Converter.API.Controllers
                 var result = await _mediator.Send(new XmlToJsonRequest { File = xmlFile, FileName = fileName });
 
                 if (string.IsNullOrEmpty(result))
-                    return BadRequest("File_Not_Processed");
+                    return BadRequest("File Not Processed. Try again");
 
                 return Ok(result);
             }
-            catch(Exception ex)
+            catch(XmlException)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("Review your xml file");
+            }
+            catch(PathTooLongException)
+            {
+                return BadRequest("The file name is too long");
+            }
+            catch(Exception)
+            {
+                return BadRequest("Something went wrong. Try again");
             }
             
         }

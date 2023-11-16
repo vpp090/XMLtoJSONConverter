@@ -25,30 +25,21 @@ namespace Converter.Application.Handlers
 
         public async Task<string> Handle(XmlToJsonRequest request, CancellationToken cancellationToken)
         {
-            try
+           string jsonString = string.Empty;
+
+            using (var streamReader = new StreamReader(request.File.OpenReadStream()))
             {
-                string jsonString = string.Empty;
+                var xmlContent = await streamReader.ReadToEndAsync();
 
-                using (var streamReader = new StreamReader(request.File.OpenReadStream()))
-                {
-                    var xmlContent = await streamReader.ReadToEndAsync();
-
-                    jsonString = await _xmlConverter.ConvertXMLtoJson(xmlContent);
-                }
-
-                var newFileName = Path.GetFileNameWithoutExtension(request.FileName);
-                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + _configuration[Constants.OutputDirectory], newFileName + Constants.JsonFileExtension);
-
-                await _fileService.WriteToFileAsync(filePath, jsonString);
-
-                return jsonString;
+                jsonString = await _xmlConverter.ConvertXMLtoJson(xmlContent);
             }
-            catch(Exception ex)
-            {
-                _logger.LogError($"Error occured in converting xml to json:{ex}");    
-                throw;
-            }
-           
+
+            var newFileName = Path.GetFileNameWithoutExtension(request.FileName);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + _configuration[Constants.OutputDirectory], newFileName + Constants.JsonFileExtension);
+
+            await _fileService.WriteToFileAsync(filePath, jsonString);
+
+            return jsonString;
         }
     }
 }

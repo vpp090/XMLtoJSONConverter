@@ -1,5 +1,8 @@
 
+
 using Converter.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System.Xml;
 
 namespace Converter.Test
@@ -8,11 +11,12 @@ namespace Converter.Test
     public class XmlConverter_Test
     {
         private XmlConverter _converter;
-
+        private Mock<ILogger<XmlConverter>> _logger;
         [SetUp]
         public void Setup()
         {
-            _converter = new XmlConverter();
+            _logger = new Mock<ILogger<XmlConverter>>();
+            _converter = new XmlConverter(_logger.Object);
         }
 
         [Test]
