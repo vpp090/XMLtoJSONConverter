@@ -1,7 +1,5 @@
-﻿using Converter.Application.Contracts;
-using Converter.Application.Requests;
+﻿using Converter.Application.Requests;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Xml;
