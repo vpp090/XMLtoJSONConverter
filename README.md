@@ -2,6 +2,8 @@
 
 This is a Web API + React XMLtoJSON Converter. 
 
-The WebAPI exposes a POST endpoint /api/ConvertXMLtoJSON. Upload an xml file to this endpoint and the result of the is a converted JSON file returned in the body of the response.
+The WebAPI exposes a POST endpoint /api/ConvertXMLtoJSON. 
+The endpoint accepts a file and the filenmae as parameters
+The file is saved to a specified location in the background.
 
 The whole application can be accessed at https://xmltojsonconverter.fly.dev
