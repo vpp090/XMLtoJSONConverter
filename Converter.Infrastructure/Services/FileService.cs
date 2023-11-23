@@ -1,5 +1,6 @@
 ﻿using Converter.Application.Contracts;
 using Converter.Application.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
@@ -10,6 +11,7 @@ namespace Converter.Infrastructure.Services
     {
         private readonly ILogger<FileService> _logger;
         private string _directoryPath;
+        private static readonly SemaphoreSlim _slim = new SemaphoreSlim(1, 1);
 
         public FileService(ILogger<FileService> logger) 
         {
@@ -30,6 +32,8 @@ namespace Converter.Infrastructure.Services
 
         public async Task WriteToFileAsync(string filePath, string content)
         {
+            await _slim.WaitAsync();
+
             try
             {
                     _directoryPath = Path.GetDirectoryName(filePath);
@@ -38,6 +42,8 @@ namespace Converter.Infrastructure.Services
                     {
                         Directory.CreateDirectory(_directoryPath);
                     }
+
+                    Thread.Sleep(30000); //THIS IS JUST FOR TESTING
 
                     await File.WriteAllTextAsync(filePath, content);
             }
@@ -50,6 +56,10 @@ namespace Converter.Infrastructure.Services
             {
                 _logger.LogError("File_IO_Exception", ex);
                 throw;
+            }
+            finally
+            {
+                _slim.Release();
             }
 
         }

@@ -6,7 +6,7 @@ namespace Converter.Application.Requests
 {
     public class XmlToJsonRequest : IRequest<string>
     {
-        public IFormFile File { get; set; }
+        public string FileContent { get; set; }
         public string FileName { get; set; }
     }
 }

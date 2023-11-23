@@ -25,14 +25,7 @@ namespace Converter.Application.Handlers
 
         public async Task<string> Handle(XmlToJsonRequest request, CancellationToken cancellationToken)
         {
-           string jsonString = string.Empty;
-
-            using (var streamReader = new StreamReader(request.File.OpenReadStream()))
-            {
-                var xmlContent = await streamReader.ReadToEndAsync();
-
-                jsonString = await _xmlConverter.ConvertXMLtoJson(xmlContent);
-            }
+             var jsonString = await _xmlConverter.ConvertXMLtoJson(request.FileContent);
 
             var newFileName = Path.GetFileNameWithoutExtension(request.FileName);
             var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + _configuration[Constants.OutputDirectory], newFileName + Constants.JsonFileExtension);

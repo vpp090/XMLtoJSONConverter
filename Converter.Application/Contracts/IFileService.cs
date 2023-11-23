@@ -1,4 +1,5 @@
 ﻿using Converter.Application.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Converter.Application.Contracts
 {
