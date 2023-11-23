@@ -1,25 +1,42 @@
 ﻿using Converter.Application.Contracts;
+using Converter.Application.Models;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 
 namespace Converter.Infrastructure.Services
 {
     public class FileService : IFileService
     {
         private readonly ILogger<FileService> _logger;
+        private string _directoryPath;
+
         public FileService(ILogger<FileService> logger) 
         {
             _logger = logger;
+        }
+
+        public async Task<FileResult> GetFileAsync(string filePath, string fileName)
+        {
+            if(!File.Exists(filePath))
+            {
+                throw new ArgumentException("File_Path_Not_Existent");
+            }
+
+            var content = await File.ReadAllBytesAsync(filePath);
+
+            return new FileResult { FileContent = content, FileName = fileName, ContentType = GetContentType(fileName)};
         }
 
         public async Task WriteToFileAsync(string filePath, string content)
         {
             try
             {
-                    var directoryPath = Path.GetDirectoryName(filePath);
+                    _directoryPath = Path.GetDirectoryName(filePath);
                 
-                    if (!Directory.Exists(directoryPath))
+                    if (!Directory.Exists(_directoryPath))
                     {
-                        Directory.CreateDirectory(directoryPath);
+                        Directory.CreateDirectory(_directoryPath);
                     }
 
                     await File.WriteAllTextAsync(filePath, content);
@@ -35,6 +52,17 @@ namespace Converter.Infrastructure.Services
                 throw;
             }
 
+        }
+
+        private string GetContentType(string fileName)
+        {
+            return Path.GetExtension(fileName.ToLowerInvariant()) switch
+            {
+                ".txt" => "text/plain",
+                ".json" => "application/json",
+                ".pdf" => "application/pdf",
+                _ => "application/octet-stream",
+            };
         }
     }
 }
