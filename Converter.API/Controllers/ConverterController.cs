@@ -45,6 +45,14 @@ namespace Converter.API.Controllers
             }
         }
 
+        [HttpPost("excelToXml")]
+        public async Task<ActionResult<IFormFile>> ConvertExceltoXML([FromForm]IFormFile excelFile)
+        {
+            var result = await _mediator.Send(new ExcelToXMLRequest { File = excelFile});
+            
+            return Ok(result);
+        }
+
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
