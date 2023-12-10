@@ -14,6 +14,30 @@ export default function Uploader(){
         if(e.target.files)
             setSelectedFile(e.target.files[0]);
     };
+    
+    const handleExcel = () => {
+        if(selectedFile){
+            const formData = new FormData();
+
+            formData.append('excelFile', selectedFile);
+            
+            axios.post('/Converter/excelToXml', formData, {
+                headers:{
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                setResponse(response.data);
+                setError(null);
+                
+            })
+            .catch(error => {
+                console.error('Error uploading file', error);
+                setResponse(null);
+                setError(JSON.stringify(error.response.data));
+            });
+        }   
+    }
 
     const handleUpload = () => {
         if(selectedFile){
@@ -50,6 +74,9 @@ export default function Uploader(){
                         </Form.Field>
                         <Button primary onClick={handleUpload}>
                             Convert XML to JSON
+                        </Button>
+                        <Button positive onClick={handleExcel}>
+                            Convert NRA excel to XML
                         </Button>
                     </Form>
                 </Grid.Column>
