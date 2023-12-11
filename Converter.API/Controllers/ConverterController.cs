@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Net;
-using System.Xml;
+using System.Text;
 
 namespace Converter.API.Controllers
 {
@@ -46,11 +46,16 @@ namespace Converter.API.Controllers
         }
 
         [HttpPost("excelToXml")]
-        public async Task<ActionResult<IFormFile>> ConvertExceltoXML([FromForm]IFormFile excelFile)
+        public async Task<ActionResult> ConvertExceltoXML([FromForm]IFormFile excelFile)
         {
             var result = await _mediator.Send(new ExcelToXMLRequest { File = excelFile});
             
-            return Ok(result);
+             var contentResult = new FileContentResult(Encoding.UTF8.GetBytes(result), "application/xml")
+            {
+                FileDownloadName = "nap_result.xml"
+            };
+
+            return contentResult;
         }
 
         [HttpGet]

@@ -24,12 +24,27 @@ export default function Uploader(){
             axios.post('/Converter/excelToXml', formData, {
                 headers:{
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                // responseType: 'blob'
             })
             .then(response => {
                 setResponse(response.data);
-                setError(null);
                 
+                const blob = new Blob([response.data], { type: 'application/xml' });
+
+                // Create a temporary URL for the Blob
+                const url = window.URL.createObjectURL(blob);
+
+                // Create an anchor element
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'nap_result.xml';
+
+                // Trigger a click on the anchor element
+                link.click();
+
+                // Cleanup: Revoke the temporary URL
+                window.URL.revokeObjectURL(url);
             })
             .catch(error => {
                 console.error('Error uploading file', error);
