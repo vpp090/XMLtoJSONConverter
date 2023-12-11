@@ -25,7 +25,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: vpetrovss/xmljsonconverter:latest
+          tags: vpetrovss/xmltojsonconverter:latest
   deploy:
     needs: docker
     name: Deploy app
