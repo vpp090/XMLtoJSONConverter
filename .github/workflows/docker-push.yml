@@ -34,10 +34,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Setup flyctl
-        run: |
-          echo "Installing flyctl..."
-          sudo curl -L https://github.com/superfly/flyctl/releases/latest/download/flyctl_$(uname -s)_$(uname -m) -o /usr/local/bin/flyctl
-          sudo chmod +x /usr/local/bin/flyctl
-
+        uses: superfly/flyctl-actions/setup-flyctl@v1
+      
       - name: Deploy to Fly.io
-        run: fly deploy --remote-only
+        run: flyctl deploy --remote-only
