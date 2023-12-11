@@ -40,4 +40,4 @@ jobs:
           sudo chmod +x /usr/local/bin/flyctl
 
       - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only
+        run: fly deploy --remote-only
