@@ -32,5 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+
+      - name: Setup flyctl
+        run: |
+          echo "Installing flyctl..."
+          sudo curl -L https://github.com/superfly/flyctl/releases/latest/download/flyctl_$(uname -s)_$(uname -m) -o /usr/local/bin/flyctl
+          sudo chmod +x /usr/local/bin/flyctl
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
