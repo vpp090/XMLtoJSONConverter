@@ -10,7 +10,7 @@ function App() {
     <Container>
         <Grid>
           <Grid.Row>
-            <Grid.Column textAlign='center'><h1>Online Converter</h1></Grid.Column>
+            <Grid.Column textAlign='center'><h1>Online Converter v1.2</h1></Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column textAlign='left'>
