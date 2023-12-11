@@ -37,9 +37,16 @@ namespace Converter.Application.Handlers
             XElement auditElement = new XElement("audit");
 
             // Add the initial elements before the start of the <order> elements
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 7; i++)
             {
-                if (!headers[i].ToLower().StartsWith("ord_") && !headers[i].ToLower().StartsWith("r_ord_"))
+                if(headers[i].ToLower() == "creation_date")
+                {
+                    DateTime dateVal;
+                    
+                    DateTime.TryParse(dataRows[i].FirstOrDefault(),out dateVal);
+                    auditElement.Add(new XElement(headers[i].ToLower(), dateVal.ToString("yyyy-MM-dd")));
+                }
+                else 
                 {
                     auditElement.Add(new XElement(headers[i].ToLower(), dataRows[i].FirstOrDefault()));
                 }
@@ -68,9 +75,18 @@ namespace Converter.Application.Handlers
                     orderEnumElement.Add(el);
                 }
 
-                if (headers[colIndex].ToLower() == "ord_d" 
-                    || headers[colIndex].ToLower() == "doc_n"
-                    || headers[colIndex].ToLower() == "doc_date")
+                if(headers[colIndex].ToLower() == "ord_d"
+                || headers[colIndex].ToLower() == "doc_date")
+                {
+                    DateTime dateVal;
+                    var fieldName = headers[colIndex].ToLower();
+                    DateTime.TryParse(dataRows[rowIndex][0], out dateVal);
+
+                    XElement el = new XElement(fieldName, dateVal.ToString("yyyy-MM-dd"));
+                    orderEnumElement.Add(el);
+                }
+
+                if (headers[colIndex].ToLower() == "doc_n")
                 {
                     if(orderEnumElement != null)
                     {
@@ -112,7 +128,7 @@ namespace Converter.Application.Handlers
                     orderEnumElement.Add(artElement);
                 }
 
-                if (headers[colIndex].ToLower() == "ord_total" ||
+                if (headers[colIndex].ToLower() == "ord_total1" ||
                     headers[colIndex].ToLower() == "ord_disc" ||
                     headers[colIndex].ToLower() == "ord_vat" ||
                     headers[colIndex].ToLower() == "ord_total2")
