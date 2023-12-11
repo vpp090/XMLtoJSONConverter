@@ -1,14 +1,20 @@
 import axios from "axios";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Button, Form, Grid, Input, TextArea } from "semantic-ui-react";
 
 export default function Uploader(){
     
     axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
+    const [tabTitle] = useState<string>(''); // Initial title
+
     const[selectedFile, setSelectedFile] = useState<File | null>(null);
     const[responseJson, setResponse] = useState<string | null>(null);
     const[responseError, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        document.title = tabTitle || 'Online Converter';
+    }, [tabTitle]);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if(e.target.files)
