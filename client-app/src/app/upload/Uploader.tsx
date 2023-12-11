@@ -84,7 +84,7 @@ export default function Uploader(){
                 <Grid.Column>
                     <Form>
                         <Form.Field>
-                            <label>Choose an xml file to upload</label>
+                            <label>Choose a file to upload</label>
                             <Input type="file" onChange={handleFileChange} />
                         </Form.Field>
                         <Button primary onClick={handleUpload}>
