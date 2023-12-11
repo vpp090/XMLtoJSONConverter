@@ -6,7 +6,7 @@ export default function Uploader(){
     
     axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
-    const [tabTitle] = useState<string>(''); // Initial title
+    const [tabTitle, setTabTitle] = useState<string>(''); // Initial title
 
     const[selectedFile, setSelectedFile] = useState<File | null>(null);
     const[responseJson, setResponse] = useState<string | null>(null);
@@ -22,6 +22,8 @@ export default function Uploader(){
     };
     
     const handleExcel = () => {
+
+        setTabTitle('Processing Excel...');
         if(selectedFile){
             const formData = new FormData();
 
@@ -51,6 +53,8 @@ export default function Uploader(){
 
                 // Cleanup: Revoke the temporary URL
                 window.URL.revokeObjectURL(url);
+
+                setTabTitle('Online Converter');
             })
             .catch(error => {
                 console.error('Error uploading file', error);
